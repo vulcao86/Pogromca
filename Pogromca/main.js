@@ -7,7 +7,8 @@ window.onload = function () {
     var enterprise = new PlayerObject(cntx.canvas.width/2, 450, sprites.enterprise, sprites.beam, sprites.ball, 0);
     var spaceships = new GameObjectsCollection(sprites.spaceship);
     beginGameWhenReady(sprites,()=>setInterval(mainLoop,25));
-
+    var canvas_height = cntx.canvas.height;
+    var canvas_width = cntx.canvas.width;
     var cmd;
     window.onkeydown = function (e) { cmd = e.key };
     var result = 800;
@@ -16,9 +17,13 @@ window.onload = function () {
     	
         cntx.clearRect(0, 0, cntx.canvas.width, cntx.canvas.height);
         cntx.font="20px Arial";
-		cntx.strokeText("High score: " + result,10,70);
-		cntx.strokeText("shotCounter: " + enterprise.shotCounter,10,20);
-		cntx.strokeText("hits: " + enterprise.beams.hits,10,45);
+        cntx.strokeText("Random mainLoop generator: " + Math.random(),400,570);
+        cntx.strokeText("Screen width: " + canvas_width, 10, 550);
+        cntx.strokeText("Screen heigth: " + canvas_height, 10, 570);
+        cntx.strokeText("Your score: " + (enterprise.shotCounter)*10,10,20);
+		cntx.strokeText("High score: " + result*2,650,20);
+		cntx.strokeText("shotCounter: " + enterprise.shotCounter,10,45);
+		cntx.strokeText("hits: " + enterprise.beams.hits,10,70);
 
         enterprise.parseCommand(cmd);
         cmd = undefined;
@@ -27,10 +32,10 @@ window.onload = function () {
         spaceships.collection.forEach(el=>el.step(0, 1));
         spaceships.remove(obj=>obj.pos.y>cntx.canvas.height);
 
-        enterprise.beams.collection.forEach(el=>el.step(0,-10));
+        enterprise.beams.collection.forEach(el=>el.step(0,-15+Math.random()));
         enterprise.beams.beamRemove(obj=>obj.pos.y < 0);
 		
-		enterprise.balls.collection.forEach(el=>el.step(0,0.3));
+		enterprise.balls.collection.forEach(el=>el.step(0,0.5-Math.random()));
         enterprise.balls.remove(obj=>obj.pos < 0);
 
         //zestrzeliwanie
@@ -99,7 +104,7 @@ function GameObject(x, y, sprite, shotCounter) {
     };
     this.enterpriseStep = function (dx, dy) {
         
-        if (this.pos.x+dx >=0 && this.pos.x+dx <= 540 )
+        if (this.pos.x+dx >=-10 && this.pos.x+dx <= 780 )
 		{
 			_x += dx;
         }
@@ -107,7 +112,7 @@ function GameObject(x, y, sprite, shotCounter) {
         {
         	_x = _x;
         }
-        if (this.pos.y+dy >=0 && this.pos.y+dy <= 540 )
+        if (this.pos.y+dy >=-10 && this.pos.y+dy <= 550 )
 		{
 			_y += dy;
         }

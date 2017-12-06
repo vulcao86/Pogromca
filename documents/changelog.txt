@@ -2,6 +2,8 @@ changelog=======================================================================
 
 06.12.2017
 
+more on-screen debugging, scoring adjusting
+wrzucenie repo do gita
 weapon improvements - szybki laser, wolne bomby
 ograniczenia dla poruszania siê Pogromcy
 wyœwietlanie liczby wystrzelonych pocisków oraz tych, które trafi³y w koniec planszy
