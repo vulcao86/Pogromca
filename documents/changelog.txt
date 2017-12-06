@@ -1,0 +1,14 @@
+changelog===============================================================================
+
+06.12.2017
+
+weapon improvements - szybki laser, wolne bomby
+ograniczenia dla poruszania siê Pogromcy
+wyœwietlanie liczby wystrzelonych pocisków oraz tych, które trafi³y w koniec planszy
+
+05.12.2017
+
+wyœwietlanie informacji o u¿ytkowniku po zalogowaniu
+udana integracja gry z logowaniem - mo¿na graæ po podaniu loginu (emaila) i has³a
+dodano do bazy kolumnê passwordnotmd5
+po rejestracji u¿ytkownia zapisujemy na bazie has³o w md5 + plaintext (tylko hasla zlo¿one z liczb siê zapisuj¹)
