@@ -10,6 +10,12 @@ window.onload = function () {
     var canvas_height = cntx.canvas.height;
     var canvas_width = cntx.canvas.width;
     var cmd;
+
+    /// user settings
+
+    var level = 0.01; // increase last digit for amount of enemy ships
+    var laserSpeed = 45; // laser speed
+    var highScore = 25000;
     window.onkeydown = function (e) { cmd = e.key };
     var result = 800;
     //document.write(result);
@@ -21,18 +27,19 @@ window.onload = function () {
         cntx.strokeText("Screen width: " + canvas_width, 10, 550);
         cntx.strokeText("Screen heigth: " + canvas_height, 10, 570);
         cntx.strokeText("Your score: " + (enterprise.shotCounter)*10,10,20);
-		cntx.strokeText("High score: " + result*2,650,20);
+		cntx.strokeText("High score: " + highScore,650,20);
 		cntx.strokeText("shotCounter: " + enterprise.shotCounter,10,45);
 		cntx.strokeText("hits: " + enterprise.beams.hits,10,70);
+
 
         enterprise.parseCommand(cmd);
         cmd = undefined;
 
-        spaceships.addNewObject(0, cntx.canvas.width - sprites.spaceship.img.width, 0, 0.01);
+        spaceships.addNewObject(0, cntx.canvas.width - sprites.spaceship.img.width, 0, level);
         spaceships.collection.forEach(el=>el.step(0, 1));
         spaceships.remove(obj=>obj.pos.y>cntx.canvas.height);
 
-        enterprise.beams.collection.forEach(el=>el.step(0,-15+Math.random()));
+        enterprise.beams.collection.forEach(el=>el.step(0,-laserSpeed+Math.random()));
         enterprise.beams.beamRemove(obj=>obj.pos.y < 0);
 		
 		enterprise.balls.collection.forEach(el=>el.step(0,0.5-Math.random()));
@@ -45,6 +52,7 @@ window.onload = function () {
         spaceships.collection.forEach(el=>drawSprite(el, cntx));
         enterprise.beams.collection.forEach(el=>drawSprite(el, cntx));
 		enterprise.balls.collection.forEach(el=>drawSprite(el, cntx));
+
     }
 }
 
@@ -53,7 +61,8 @@ function initializeSprites() {
         enterprise: new SpriteImage('enterprise.png'),
         spaceship: new SpriteImage('spaceship.png'),
         beam: new SpriteImage('beam.png'),
-		ball: new SpriteImage('ball.png')
+		ball: new SpriteImage('ball.png'),
+		background: new SpriteImage('a2c.png')
     };
 }
 
@@ -154,6 +163,7 @@ function PlayerObject(x, y, sprite, beamSprite, ballSprite, shotCounter) {
     _commandList['w'] = () =>this.enterpriseStep(0,-_stepSize);
     _commandList['j'] = () =>{this.beams.addNewObject(this.pos.x, this.pos.x, this.pos.y, 1); (this.enterpriseShot())};
 	_commandList['k'] = () =>this.balls.addNewObject(this.pos.x, this.pos.x, this.pos.y, 1);
+	_commandList['u'] = () =>{this.beams.addNewObject(this.pos.x-20, this.pos.x-10, this.pos.y, 1); (this.enterpriseShot())};
 
     this.beams = new GameObjectsCollection(beamSprite);
     this.balls = new GameObjectsCollection(ballSprite);
