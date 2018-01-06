@@ -1,4 +1,4 @@
-﻿
+
 
 window.onload = function () {
     var cntx = document.querySelector('canvas').getContext('2d');
@@ -12,10 +12,11 @@ window.onload = function () {
     var cmd;
 
     /// user settings
-
-    var level = 0.01; // increase last digit for amount of enemy ships
-    var laserSpeed = 45; // laser speed
+    
+    var level = 0.03; // increase last digit for amount of enemy ships, 0.01 is default
+    var laserSpeed = 5; // laser speed
     var highScore = 25000;
+    var accuracy = 0;
     window.onkeydown = function (e) { cmd = e.key };
     var result = 800;
     //document.write(result);
@@ -29,8 +30,8 @@ window.onload = function () {
         cntx.strokeText("Your score: " + (enterprise.shotCounter)*10,10,20);
 		cntx.strokeText("High score: " + highScore,650,20);
 		cntx.strokeText("shotCounter: " + enterprise.shotCounter,10,45);
-		cntx.strokeText("hits: " + enterprise.beams.hits,10,70);
-
+		cntx.strokeText("hits: " + spaceships.hits,10,70);
+		cntx.strokeText("accuracy: " + parseInt(spaceships.hits/enterprise.shotCounter*100) + "%",10,95);
 
         enterprise.parseCommand(cmd);
         cmd = undefined;
@@ -39,8 +40,24 @@ window.onload = function () {
         spaceships.collection.forEach(el=>el.step(0, 1));
         spaceships.remove(obj=>obj.pos.y>cntx.canvas.height);
 
+
         enterprise.beams.collection.forEach(el=>el.step(0,-laserSpeed+Math.random()));
-        enterprise.beams.beamRemove(obj=>obj.pos.y < 0);
+        enterprise.beams.collection.forEach(beam=>
+        	(spaceships.hitRemove(
+        		spaceship=>
+        			(
+			        	(beam.pos.y<=spaceship.pos.y+sprites.spaceship.img.height) &&
+			        	(beam.pos.x<=spaceship.pos.x+sprites.spaceship.img.width) &&
+			        	(beam.pos.x>=spaceship.pos.x)
+		        	)
+	        	)
+	        )
+	    );
+
+        //efekt bomby
+        //enterprise.beams.collection.forEach(el=>spaceships.remove(obj=>((obj.pos.y>300))));
+
+        enterprise.beams.remove(obj=>obj.pos.y < 0);
 		
 		enterprise.balls.collection.forEach(el=>el.step(0,0.5-Math.random()));
         enterprise.balls.remove(obj=>obj.pos < 0);
@@ -163,7 +180,7 @@ function PlayerObject(x, y, sprite, beamSprite, ballSprite, shotCounter) {
     _commandList['w'] = () =>this.enterpriseStep(0,-_stepSize);
     _commandList['j'] = () =>{this.beams.addNewObject(this.pos.x, this.pos.x, this.pos.y, 1); (this.enterpriseShot())};
 	_commandList['k'] = () =>this.balls.addNewObject(this.pos.x, this.pos.x, this.pos.y, 1);
-	_commandList['u'] = () =>{this.beams.addNewObject(this.pos.x-20, this.pos.x-10, this.pos.y, 1); (this.enterpriseShot())};
+	_commandList['u'] = () =>{this.beams.addNewObject(this.pos.x-100, this.pos.x+100, this.pos.y, 1); (this.enterpriseShot())};
 
     this.beams = new GameObjectsCollection(beamSprite);
     this.balls = new GameObjectsCollection(ballSprite);
@@ -204,7 +221,7 @@ function GameObjectsCollection(sprite) {
         }
     }
 
-    this.beamRemove = function (filter) {
+    this.hitRemove = function (filter) {
         var toRemove = [];
         for (var i = 0; i < _collection.length; i++) {
             var obj = _collection[i];
