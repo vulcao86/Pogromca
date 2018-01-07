@@ -1,9 +1,10 @@
 
 
 window.onload = function () {
+	var gameOver = false;
     var cntx = document.querySelector('canvas').getContext('2d');
     var sprites = initializeSprites();
-    
+   
     var enterprise = new PlayerObject(cntx.canvas.width/2, 450, sprites.enterprise, sprites.beam, sprites.ball, 0);
     var spaceships = new GameObjectsCollection(sprites.spaceship);
     beginGameWhenReady(sprites,()=>setInterval(mainLoop,25));
@@ -17,60 +18,73 @@ window.onload = function () {
     var laserSpeed = 5; // laser speed
     var highScore = 25000;
     var accuracy = 0;
+    var shotLimit = 100;
     window.onkeydown = function (e) { cmd = e.key };
     var result = 800;
     //document.write(result);
     function mainLoop() {
-    	
-        cntx.clearRect(0, 0, cntx.canvas.width, cntx.canvas.height);
-        cntx.font="20px Arial";
-        cntx.strokeText("Random mainLoop generator: " + Math.random(),400,570);
-        cntx.strokeText("Screen width: " + canvas_width, 10, 550);
-        cntx.strokeText("Screen heigth: " + canvas_height, 10, 570);
-        cntx.strokeText("Your score: " + (enterprise.shotCounter)*10,10,20);
-		cntx.strokeText("High score: " + highScore,650,20);
-		cntx.strokeText("shotCounter: " + enterprise.shotCounter,10,45);
-		cntx.strokeText("hits: " + spaceships.hits,10,70);
-		cntx.strokeText("accuracy: " + parseInt(spaceships.hits/enterprise.shotCounter*100) + "%",10,95);
+	    if(!gameOver){
 
-        enterprise.parseCommand(cmd);
-        cmd = undefined;
+	    	if(enterprise.shotCounter>=shotLimit)
+	    	{
+	    		
+	    		console.log("GAME OVER");
+	    	    gameOver = true;
+	    	}
+	        cntx.clearRect(0, 0, cntx.canvas.width, cntx.canvas.height);
+	        cntx.font="20px Arial";
+	        cntx.strokeText("Random mainLoop generator: " + Math.random(),400,570);
+	        cntx.strokeText("Screen width: " + canvas_width, 10, 550);
+	        cntx.strokeText("Screen heigth: " + canvas_height, 10, 570);
+	        cntx.strokeText("Your score: " + (enterprise.shotCounter)*10,10,20);
+			cntx.strokeText("High score: " + highScore,650,20);
+			cntx.strokeText("shotCounter: " + enterprise.shotCounter,10,45);
+			cntx.strokeText("hits: " + spaceships.hits,10,70);
+			accuracy = parseInt(spaceships.hits/enterprise.shotCounter*100) || 0;
+			cntx.strokeText("accuracy: " + accuracy + "%",10,95);
+			if(gameOver){
+				cntx.font="50px Arial";
+    	    	cntx.strokeText("GAME OVER" ,300,270);
+			}
+	        enterprise.parseCommand(cmd);
+	        cmd = undefined;
 
-        spaceships.addNewObject(0, cntx.canvas.width - sprites.spaceship.img.width, 0, level);
-        spaceships.collection.forEach(el=>el.step(0, 1));
-        spaceships.remove(obj=>obj.pos.y>cntx.canvas.height);
+	        spaceships.addNewObject(0, cntx.canvas.width - sprites.spaceship.img.width, 0, level);
+	        spaceships.collection.forEach(el=>el.step(0, 1));
+	        spaceships.remove(obj=>obj.pos.y>cntx.canvas.height);
 
 
-        enterprise.beams.collection.forEach(el=>el.step(0,-laserSpeed+Math.random()));
-        enterprise.beams.collection.forEach(beam=>
-        	(spaceships.hitRemove(
-        		spaceship=>
-        			(
-			        	(beam.pos.y<=spaceship.pos.y+sprites.spaceship.img.height) &&
-			        	(beam.pos.x<=spaceship.pos.x+sprites.spaceship.img.width) &&
-			        	(beam.pos.x>=spaceship.pos.x)
+	        enterprise.beams.collection.forEach(el=>el.step(0,-laserSpeed+Math.random()));
+	        enterprise.beams.collection.forEach(beam=>
+	        	(spaceships.hitRemove(
+	        		spaceship=>
+	        			(
+				        	(beam.pos.y<=spaceship.pos.y+sprites.spaceship.img.height) &&
+				        	(beam.pos.x<=spaceship.pos.x+sprites.spaceship.img.width) &&
+				        	(beam.pos.x>=spaceship.pos.x)
+			        	)
 		        	)
-	        	)
-	        )
-	    );
+		        )
+		    );
 
-        //efekt bomby
-        //enterprise.beams.collection.forEach(el=>spaceships.remove(obj=>((obj.pos.y>300))));
+	        //efekt bomby
+	        //enterprise.beams.collection.forEach(el=>spaceships.remove(obj=>((obj.pos.y>300))));
 
-        enterprise.beams.remove(obj=>obj.pos.y < 0);
-		
-		enterprise.balls.collection.forEach(el=>el.step(0,0.5-Math.random()));
-        enterprise.balls.remove(obj=>obj.pos < 0);
+	        enterprise.beams.remove(obj=>obj.pos.y < 0);
+			
+			enterprise.balls.collection.forEach(el=>el.step(0,0.5-Math.random()));
+	        enterprise.balls.remove(obj=>obj.pos < 0);
 
-        //zestrzeliwanie
-        enterprise.beams.collection.forEach(beam=>beam.pos.y);
+	        //zestrzeliwanie
+	        enterprise.beams.collection.forEach(beam=>beam.pos.y);
 
-        drawSprite(enterprise, cntx);
-        spaceships.collection.forEach(el=>drawSprite(el, cntx));
-        enterprise.beams.collection.forEach(el=>drawSprite(el, cntx));
-		enterprise.balls.collection.forEach(el=>drawSprite(el, cntx));
+	        drawSprite(enterprise, cntx);
+	        spaceships.collection.forEach(el=>drawSprite(el, cntx));
+	        enterprise.beams.collection.forEach(el=>drawSprite(el, cntx));
+			enterprise.balls.collection.forEach(el=>drawSprite(el, cntx));
 
-    }
+	    }
+	}
 }
 
 function initializeSprites() {
