@@ -1,3 +1,7 @@
 ﻿canvas{
-    border: 1px solid black
+
+    background-image: url('img/a2c.png');
+    background-image: width( 1200); 
+    border: 15px inset brown;
+    border-radius: 18px;
 }

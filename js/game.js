@@ -24,7 +24,18 @@ window.onload = function () {
     //document.write(result);
     function mainLoop() {
 	    if(!gameOver){
-
+            spaceships.collection.forEach(
+                spaceship=>
+                    {
+                        if(
+                            (enterprise.pos.y<=spaceship.pos.y+sprites.spaceship.img.height) && //ok
+                            (enterprise.pos.x<=spaceship.pos.x+sprites.spaceship.img.width) &&  
+                            (enterprise.pos.x+sprites.enterprise.img.width>=spaceship.pos.x)
+                        ){
+                            gameOver=true;
+                        }
+                    }
+            );
 	    	if(enterprise.shotCounter>=shotLimit)
 	    	{
 	    		
@@ -71,7 +82,6 @@ window.onload = function () {
 	        //enterprise.beams.collection.forEach(el=>spaceships.remove(obj=>((obj.pos.y>300))));
 
 	        enterprise.beams.remove(obj=>obj.pos.y < 0);
-			
 			enterprise.balls.collection.forEach(el=>el.step(0,0.5-Math.random()));
 	        enterprise.balls.remove(obj=>obj.pos < 0);
 
@@ -92,8 +102,7 @@ function initializeSprites() {
         enterprise: new SpriteImage('img/enterprise.png'),
         spaceship: new SpriteImage('img/spaceship.png'),
         beam: new SpriteImage('img/beam.png'),
-		ball: new SpriteImage('img/ball.png'),
-		background: new SpriteImage('img/a2c.png')
+		ball: new SpriteImage('img/ball.png')
     };
 }
 

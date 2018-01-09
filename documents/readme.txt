@@ -59,4 +59,5 @@ TODO====
 1. niszczenie obiektów
 2. bonusy
 3. z³o¿one zapytanie do tabeli z wynikami do wyœwietlenia w highscore + tabela z najlepszymi wynikami
-4 CSS kolory + wersja jêzykowa
+4. CSS kolory + wersja jêzykowa
+5. collisionDetection 

@@ -1,0 +1,15 @@
+CREATE TABLE highscore(
+
+id int,
+username varchar(32),
+email varchar(255),
+value int,
+accuracy int,
+kills int,
+shots int,
+time int,
+quote varchar(64)
+
+)
+
+

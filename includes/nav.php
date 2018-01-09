@@ -12,15 +12,15 @@
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li><a href="index.php">Home</a></li>
-            <li><a href="login.php">Game</a></li>
-           <?php if(logged_in()):?>
+            <li><a href="login.php">Login</a></li>
 
-                <li><a href="admin.php">Admin</a></li>
+            <?php if(logged_in()):?>
 
-               <li><a href="logout.php">Logout</a></li>
-  
+            <li><a href="admin.php">Admin</a></li>
+            <li><a href="game.php">Game</a></li>
+            <li><a href="logout.php">Logout</a></li>
 
-         <?php endif; ?>
+            <?php endif; ?>
 
            
           </ul>

@@ -9,6 +9,19 @@
 	<script src="js/jquery.js"></script>
 	<script src="js/bootstrap.js"></script>
 	<script src="js/scripts.js"></script>
+	<script src="js/game.js"></script>
+	<style>
+
+        canvas {
+
+            background-image: url('a2c.png');
+
+            border: 15px inset brown;
+            border-radius: 18px;
+
+        }
+
+    </style>
 </head>
 <body>
 
